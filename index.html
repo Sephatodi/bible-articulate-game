@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#08181B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Articulate the Bible — The Well of Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --water-deep:#0B3A40;
+  --water-glow:#3FC6CE;
+  --stone:#8C7A5B;
+  --stone-dark:#1E2422;
+  --gold:#E3B23C;
+  --ivory:#F5EFE0;
+  --card-bg:#122F33;
+  --blue:#3B82C4;
+  --green:#4C9A5B;
+  --yellow:#E3B23C;
+  --red:#C1503A;
+  --orange:#D9752B;
+  --purple:#8B6EB8;
+  --pink:#E86A92;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overscroll-behavior:none;}
+body{
+  background:
+    radial-gradient(circle at 50% -10%, #113E45 0%, #08181B 60%),
+    var(--stone-dark);
+  color:var(--ivory);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  overflow-x:hidden;
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+input, textarea{
+  -webkit-user-select:text;
+  user-select:text;
+  -webkit-touch-callout:default;
+}
+.app{
+  width:100%;max-width:480px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;position:relative;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) max(6px, env(safe-area-inset-bottom)) env(safe-area-inset-left);
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:700;}
+.eyebrow{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--water-glow);opacity:.85;}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none;}
+
+/* ---------- SCREEN: SETUP ---------- */
+.screen{display:none;flex-direction:column;flex:1;padding:28px 22px 14px;gap:6px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.screen.active{display:flex;}
+.hero{text-align:center;padding:18px 0 8px;}
+.hero .ring-icon{width:96px;height:96px;margin:0 auto 14px;}
+.hero h1{font-size:30px;line-height:1.15;color:var(--ivory);}
+.hero p.tag{color:var(--water-glow);font-size:14px;margin-top:8px;letter-spacing:.02em;}
+
+.field{margin-top:22px;}
+.field label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}
+.team-input{
+  width:100%;padding:14px 16px;border-radius:var(--radius);
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.12);
+  color:var(--ivory);font-size:16px;font-family:'Inter',sans-serif;
+}
+.team-input:focus{outline:none;border-color:var(--water-glow);}
+.team-row-item{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.team-row-item .team-input{border-left:4px solid var(--team-color,var(--gold));flex:1;min-width:0;}
+.team-remove-btn{
+  flex-shrink:0;width:38px;height:38px;border-radius:50%;
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.14);
+  color:var(--stone);font-size:16px;line-height:1;
+}
+.team-remove-btn:active{transform:scale(.92);}
+
+.target-row{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap;}
+.map-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.map-pill{
+  flex:1;min-width:96px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 8px;border-radius:14px;background:var(--card-bg);
+  border:1px solid rgba(245,239,224,.12);color:var(--stone);transition:.15s;
+}
+.map-pill svg{width:34px;height:34px;color:var(--stone);}
+.map-pill span{font-size:11px;font-weight:600;text-align:center;}
+.map-pill.selected{background:rgba(227,178,60,.12);border-color:var(--gold);color:var(--gold);}
+.map-pill.selected svg{color:var(--gold);}
+.target-pill{
+  flex:1;padding:12px 0;text-align:center;border-radius:999px;
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.12);
+  color:var(--stone);font-size:14px;font-weight:600;transition:.15s;min-width:56px;
+}
+.target-pill.selected{background:var(--gold);color:#3B2A0A;border-color:var(--gold);}
+.target-pill.custom{flex:0 0 auto;padding:12px 14px;min-width:74px;}
+.target-pill.custom input{
+  background:transparent;border:none;color:var(--ivory);font-size:14px;
+  font-weight:700;width:46px;text-align:center;font-family:'Inter',sans-serif;
+}
+.target-pill.custom input:focus{outline:none;}
+.target-pill.custom input::placeholder{color:var(--stone);}
+
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-top:22px;padding:14px 16px;border-radius:var(--radius);
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.12);
+}
+.toggle-row .toggle-copy{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.toggle-row .toggle-title{font-size:14px;font-weight:600;color:var(--ivory);}
+.toggle-row .toggle-sub{font-size:12px;color:var(--stone);}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0;}
+.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;}
+.switch .track{
+  position:absolute;inset:0;border-radius:999px;background:rgba(245,239,224,.15);
+  transition:.2s;
+}
+.switch .knob{
+  position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:var(--ivory);transition:.2s;
+}
+.switch input:checked + .track{background:var(--gold);}
+.switch input:checked ~ .knob{transform:translateX(20px);}
+
+.primary-btn{
+  margin-top:28px;
+}
+.btn{
+  width:100%;padding:17px;border-radius:999px;font-size:16px;font-weight:600;
+  background:var(--gold);color:#3B2A0A;letter-spacing:.02em;
+  transition:transform .1s;
+}
+.btn:active{transform:scale(.97);}
+.btn.ghost{background:transparent;border:1px solid rgba(245,239,224,.25);color:var(--ivory);margin-top:10px;}
+.btn.small{padding:12px;font-size:14px;}
+
+/* ---------- SCREEN: HANDOFF ---------- */
+.handoff{align-items:center;justify-content:center;text-align:center;gap:18px;}
+.handoff .team-chip{
+  display:inline-block;padding:8px 20px;border-radius:999px;font-size:13px;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+  max-width:100%;overflow-wrap:anywhere;text-align:center;
+}
+.handoff h2{font-size:26px;margin-top:6px;}
+.handoff p{color:var(--stone);font-size:14px;max-width:280px;line-height:1.6;}
+
+/* ---------- SCREEN: PLAY ---------- */
+.play-screen{padding:18px 18px 24px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.play-menu{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.mini-btn{
+  background:transparent;border:1px solid rgba(245,239,224,.14);
+  color:var(--stone);font-size:11px;font-weight:600;letter-spacing:.03em;
+  padding:6px 12px;border-radius:999px;display:flex;align-items:center;gap:5px;
+  transition:.15s;
+}
+.mini-btn:active{transform:scale(.95);}
+.mini-btn.danger{color:#F0A48F;border-color:rgba(193,80,58,.3);}
+.mini-btn .icon{font-size:12px;}
+.score-tag{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere;}
+.score-tag .val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;}
+.score-tag .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);}
+
+.timer-ring{position:relative;width:78px;height:78px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:6;}
+.timer-ring .track{stroke:rgba(245,239,224,.1);}
+.timer-ring .fill{stroke:var(--water-glow);stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s;}
+.timer-ring .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;font-weight:700;}
+
+.board-container{
+  position:relative;
+  width:100%;
+  background:linear-gradient(145deg, #0A2629, #0D3135);
+  border-radius:20px;
+  padding:14px 12px 12px;
+  border:1px solid rgba(63,198,206,.15);
+  box-shadow:inset 0 0 60px rgba(63,198,206,.05), 0 8px 32px rgba(0,0,0,.4);
+  margin:6px 0 16px;
+}
+.board-header{display:flex;justify-content:space-between;align-items:center;padding:0 4px 8px;}
+.board-header .target-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);font-weight:600;}
+.board-header .target-value{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--gold);}
+
+.board-maze{width:100%;aspect-ratio:1/1;position:relative;max-width:300px;margin:0 auto;}
+.board-maze svg{width:100%;height:100%;filter:drop-shadow(0 0 20px rgba(63,198,206,.05));}
+
+.team-indicators{position:absolute;inset:0;pointer-events:none;}
+.team-dot{
+  position:absolute;width:26px;height:26px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:all .8s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#000;z-index:10;
+  border:2px solid rgba(255,255,255,.3);
+  background:var(--dot-color,var(--gold));
+  box-shadow:0 0 30px var(--dot-glow,rgba(227,178,60,.5));
+}
+.team-dot .label{font-size:8px;font-weight:900;letter-spacing:.05em;text-shadow:0 1px 2px rgba(0,0,0,.3);}
+.team-dot .pulse{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+.board-legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 4px 10px;font-size:11px;color:var(--stone);}
+.board-legend .legend-item{display:flex;align-items:center;gap:5px;min-width:0;overflow-wrap:anywhere;}
+.board-legend .legend-swatch{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.4);opacity:0;}}
+@keyframes finish-pulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6;}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1;}}
+
+.category-badge{
+  align-self:center;padding:9px 22px;border-radius:999px;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:16px;
+  max-width:100%;text-align:center;overflow-wrap:anywhere;
+}
+.card{
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.1);
+  border-radius:20px;padding:36px 20px;text-align:center;flex:1;
+  display:flex;align-items:center;justify-content:center;min-height:180px;
+  overflow:hidden;
+}
+.card .word{font-family:'Fraunces',serif;font-size:34px;font-weight:700;line-height:1.15;overflow-wrap:anywhere;word-break:break-word;}
+
+.controls{display:flex;gap:14px;margin-top:20px;}
+.ctrl-btn{
+  flex:1;padding:22px 0;border-radius:20px;font-size:15px;font-weight:700;
+  display:flex;flex-direction:column;align-items:center;gap:6px;letter-spacing:.03em;
+  transition:transform .1s;
+}
+.ctrl-btn:active{transform:scale(.96);}
+.ctrl-btn .icon{font-size:22px;}
+.skip-btn{background:rgba(193,80,58,.16);color:#F0A48F;border:1px solid rgba(193,80,58,.4);}
+.correct-btn{background:rgba(76,154,91,.18);color:#8FDB9E;border:1px solid rgba(76,154,91,.45);}
+
+.turn-total{text-align:center;font-size:12px;color:var(--stone);margin-top:14px;letter-spacing:.05em;}
+
+.motion-hint{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:12px;padding:9px 14px;border-radius:999px;
+  background:rgba(63,198,206,.08);border:1px solid rgba(63,198,206,.2);
+  font-size:11px;color:var(--water-glow);letter-spacing:.03em;
+}
+.motion-hint.inactive{background:rgba(245,239,224,.05);border-color:rgba(245,239,224,.1);color:var(--stone);}
+.motion-hint .arrow{font-size:13px;}
+.motion-hint .arrow.up{color:#8FDB9E;}
+.motion-hint .arrow.down{color:#F0A48F;}
+
+/* ---------- SCREEN: TURN SUMMARY ---------- */
+.summary{align-items:center;justify-content:center;text-align:center;gap:10px;}
+.summary .big-num{font-family:'Fraunces',serif;font-size:64px;font-weight:700;color:var(--gold);}
+.summary p.sub{color:var(--stone);font-size:14px;}
+.summary .board{width:100%;background:var(--card-bg);border-radius:var(--radius);padding:18px;margin-top:20px;border:1px solid rgba(245,239,224,.1);}
+.board-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:15px;}
+.board-row+.board-row{border-top:1px solid rgba(245,239,224,.08);}
+.board-row .name{color:var(--ivory);font-weight:600;min-width:0;overflow-wrap:anywhere;}
+.board-row .pts{flex-shrink:0;}
+.board-row .pts{font-family:'Fraunces',serif;font-weight:700;color:var(--water-glow);}
+
+.turn-log{width:100%;margin-top:16px;max-height:220px;overflow-y:auto;text-align:left;}
+.turn-log-row{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  padding:10px 14px;border-radius:12px;margin-bottom:6px;font-size:13px;
+  background:var(--card-bg);border:1px solid rgba(245,239,224,.08);
+}
+.turn-log-row.correct{background:rgba(76,154,91,.14);border-color:rgba(76,154,91,.35);}
+.turn-log-row.skipped{background:rgba(193,80,58,.1);border-color:rgba(193,80,58,.28);opacity:.85;}
+.turn-log-text{color:var(--ivory);flex:1;min-width:0;overflow-wrap:anywhere;}
+.turn-log-answer{display:block;font-size:11px;color:var(--gold);margin-top:3px;font-weight:600;letter-spacing:.02em;}
+.turn-log-ref{color:var(--stone);font-weight:500;font-style:italic;}
+.turn-log-row.skipped .turn-log-answer{color:#F0C48F;}
+.turn-log-row.skipped .turn-log-text{color:var(--stone);text-decoration:line-through;text-decoration-color:rgba(193,80,58,.5);}
+.turn-log-icon{font-weight:800;flex-shrink:0;}
+.turn-log-row.correct .turn-log-icon{color:#8FDB9E;}
+.turn-log-row.skipped .turn-log-icon{color:#F0A48F;}
+.turn-log-empty{color:var(--stone);font-size:13px;text-align:center;padding:8px 0;}
+
+/* ---------- SCREEN: WIN ---------- */
+.win{align-items:center;justify-content:center;text-align:center;gap:12px;}
+.win .crown{font-size:52px;}
+.win h1{font-size:30px;overflow-wrap:anywhere;max-width:100%;}
+.win p{color:var(--stone);font-size:14px;}
+
+/* ---------- CLUE CARDS (statement-style bonus cards, described like any word) ---------- */
+.card .word.clue-text{font-size:21px;line-height:1.4;font-weight:600;}
+
+.hidden{display:none !important;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+@media (prefers-reduced-motion: reduce){
+  .timer-ring .fill{transition:none;}
+  .team-dot{transition:none;}
+  .team-dot .pulse{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- SETUP SCREEN -->
+  <section class="screen active" id="screen-setup">
+    <h2 class="sr-only">Set up your Articulate the Bible match</h2>
+    <div class="hero">
+      <svg class="ring-icon" viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r="44" fill="none" stroke="#3FC6CE" stroke-opacity=".25" stroke-width="3"/>
+        <circle cx="48" cy="48" r="32" fill="none" stroke="#3FC6CE" stroke-opacity=".45" stroke-width="3"/>
+        <circle cx="48" cy="48" r="20" fill="none" stroke="#3FC6CE" stroke-opacity=".7" stroke-width="3"/>
+        <circle cx="48" cy="48" r="9" fill="#E3B23C"/>
+      </svg>
+      <h1>Articulate the Bible</h1>
+      <p class="tag">The Well of Life · A Bible Race</p>
+    </div>
+
+    <div class="field">
+      <label>Teams (2–4)</label>
+      <div id="teamsList"></div>
+      <button class="btn ghost small" id="addTeamBtn" type="button" style="margin-top:8px;">+ Add another team</button>
+    </div>
+
+    <div class="field">
+      <label>Race map</label>
+      <div class="map-row" id="mapRow">
+        <button class="map-pill selected" data-style="classic">
+          <svg viewBox="0 0 40 40"><path d="M4 6 L4 20 L14 20 L14 10 L26 10 L26 26 L10 26 L10 34 L36 34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+          <span>Classic Maze</span>
+        </button>
+        <button class="map-pill" data-style="winding">
+          <svg viewBox="0 0 40 40"><path d="M6 4 C18 4 2 14 14 16 C26 18 6 24 18 28 C28 31 20 36 34 36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <span>Winding Trail</span>
+        </button>
+        <button class="map-pill" data-style="hex">
+          <svg viewBox="0 0 40 40"><polygon points="20,4 34,12 34,28 20,36 6,28 6,12" fill="none" stroke="currentColor" stroke-width="2.5"/><polygon points="20,12 27,16 27,24 20,28 13,24 13,16" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <span>Hex Spiral</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Race to (points)</label>
+      <div class="target-row" id="targetRow">
+        <button class="target-pill" data-val="20">20</button>
+        <button class="target-pill selected" data-val="30">30</button>
+        <button class="target-pill" data-val="40">40</button>
+        <button class="target-pill" data-val="50">50</button>
+        <button class="target-pill" data-val="100">100</button>
+        <button class="target-pill custom" data-val="custom">
+          <input type="number" id="customTarget" placeholder="Any" min="1" max="500">
+        </button>
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-copy">
+        <span class="toggle-title">Tilt controls</span>
+        <span class="toggle-sub">Tilt phone up for correct, down to skip</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="motionToggle" checked>
+        <span class="track"></span>
+        <span class="knob"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-copy">
+        <span class="toggle-title">Bonus clue cards</span>
+        <span class="toggle-sub">Mix in describable Bible clues alongside the words</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="triviaToggle" checked>
+        <span class="track"></span>
+        <span class="knob"></span>
+      </label>
+    </div>
+
+    <div class="primary-btn">
+      <button class="btn" id="startGameBtn">Begin at the well</button>
+      <p style="text-align:center;color:var(--stone);font-size:12px;margin-top:14px;line-height:1.6;">Pass one phone around the circle. Describe each word or clue without saying the answer, spelling it, or rhyming it.</p>
+    </div>
+  </section>
+
+  <!-- HANDOFF SCREEN -->
+  <section class="screen handoff" id="screen-handoff">
+    <h2 class="sr-only">Pass the phone to the next describer</h2>
+    <span class="eyebrow">Turn <span id="handoffTurnNum">1</span></span>
+    <span class="team-chip" id="handoffChip">Springs</span>
+    <h2>Hand the phone to your describer</h2>
+    <p>You'll have <strong>30 seconds</strong> to describe as many words as you can. Teammates guess out loud — no saying the word, no rhymes, no spelling it out.</p>
+    <div class="primary-btn" style="width:100%;">
+      <button class="btn" id="readyBtn">We're ready — start the clock</button>
+    </div>
+  </section>
+
+  <!-- PLAY SCREEN -->
+  <section class="screen play-screen" id="screen-play">
+    <h2 class="sr-only">Describe the word before the timer ends</h2>
+    <div class="play-menu">
+      <button class="mini-btn" id="restartBtn"><span class="icon">↺</span> Restart</button>
+      <button class="mini-btn danger" id="endGameBtn"><span class="icon">✕</span> End game</button>
+    </div>
+    <div class="top-bar">
+      <div class="score-tag">
+        <span class="lbl" id="playTeamLabel">SPRINGS</span>
+        <span class="val" id="playTeamScore">0</span>
+      </div>
+      <div class="timer-ring">
+        <svg width="78" height="78" viewBox="0 0 78 78">
+          <circle class="track" cx="39" cy="39" r="33"/>
+          <circle class="fill" id="timerFill" cx="39" cy="39" r="33" stroke-dasharray="207.3" stroke-dashoffset="0"/>
+        </svg>
+        <div class="num" id="timerNum">30</div>
+      </div>
+    </div>
+
+    <div class="category-badge" id="categoryBadge">Category</div>
+    <div class="card" id="wordCardWrap">
+      <div class="word" id="wordDisplay">Ready?</div>
+    </div>
+
+    <div class="controls" id="describeControls">
+      <button class="ctrl-btn skip-btn" id="skipBtn">
+        <span class="icon">↺</span> Skip
+      </button>
+      <button class="ctrl-btn correct-btn" id="correctBtn">
+        <span class="icon">✓</span> Got it
+      </button>
+    </div>
+    <p class="turn-total">Guessed this turn: <strong id="turnTally">0</strong></p>
+    <div class="motion-hint inactive" id="motionHint">
+      <span class="arrow up">▲</span> Tilt up = Got it &nbsp;·&nbsp; Tilt down = Skip <span class="arrow down">▼</span>
+    </div>
+  </section>
+
+  <!-- TURN SUMMARY SCREEN -->
+  <section class="screen summary" id="screen-summary">
+    <h2 class="sr-only">Turn results</h2>
+    <span class="eyebrow">Time's up</span>
+    <div class="big-num" id="summaryPoints">0</div>
+    <p class="sub">words guessed this turn</p>
+    <div class="turn-log" id="turnLog"></div>
+    <div class="board" id="summaryBoard"></div>
+
+    <div class="board-container" id="boardContainer">
+      <div class="board-header">
+        <span class="target-label">🏆 Target</span>
+        <span class="target-value" id="boardTarget">30</span>
+      </div>
+      <div class="board-legend" id="boardLegend"></div>
+      <div class="board-maze" id="boardMaze">
+        <svg viewBox="0 0 400 400" id="mazeSvg">
+          <defs>
+            <radialGradient id="wellGlow">
+              <stop offset="0%" stop-color="#E3B23C" stop-opacity="0.4"/>
+              <stop offset="60%" stop-color="#E3B23C" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="#E3B23C" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <rect width="400" height="400" rx="12" fill="#0D2A2E"/>
+          <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(63,198,206,.08)" stroke-width="1"/>
+          <circle cx="200" cy="200" r="110" fill="none" stroke="rgba(63,198,206,.06)" stroke-width="1"/>
+          <circle cx="200" cy="200" r="55" fill="none" stroke="rgba(63,198,206,.05)" stroke-width="1"/>
+
+          <g id="spokeLanes"></g>
+          <g id="spokeProgress"></g>
+
+          <circle cx="200" cy="200" r="34" fill="none" stroke="#E3B23C" stroke-width="2" opacity="0.3"/>
+          <circle cx="200" cy="200" r="24" fill="url(#wellGlow)"/>
+          <circle cx="200" cy="200" r="13" fill="#E3B23C" opacity="0.8"/>
+          <text x="200" y="204" text-anchor="middle" font-size="12" fill="#000" font-weight="900">✦</text>
+          <text x="200" y="222" text-anchor="middle" font-size="8" fill="#E3B23C" opacity="0.6" letter-spacing="1">WELL</text>
+        </svg>
+
+        <div class="team-indicators" id="teamIndicators"></div>
+      </div>
+    </div>
+
+    <div class="primary-btn" style="width:100%;">
+      <button class="btn" id="nextTurnBtn">Next describer</button>
+    </div>
+  </section>
+
+
+  <!-- WIN SCREEN -->
+  <section class="screen win" id="screen-win">
+    <h2 class="sr-only">Game over, winner announced</h2>
+    <div class="crown">👑</div>
+    <span class="eyebrow">Reached the well of life</span>
+    <h1 id="winTeamName">Team</h1>
+    <p id="winScoreLine">30 points</p>
+    <div class="primary-btn" style="width:100%;">
+      <button class="btn" id="playAgainBtn">Play again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------------- GAME DATA ---------------- */
+/* ---------------- TEAMS (2-4 supported) ---------------- */
+const TEAM_COLORS = ["#E3B23C", "#3FC6CE", "#4C9A5B", "#E86A92"];
+let teamNames = ["Springs", "Fountains"];
+
+const CATEGORIES = [
+  { key:"people", name:"People & Prophets", color:"var(--blue)", bg:"rgba(59,130,196,.18)", border:"rgba(59,130,196,.45)",
+    words:["Moses","Abraham","Deborah","David","Esther","Paul","Mary Magdalene","Samson","Ruth","Elijah","Isaac","Jacob","Joseph","Peter","John the Baptist","Solomon","Daniel","Noah","Sarah","Gideon",
+      "Andrew","James","John","Philip","Bartholomew","Thomas","Matthew","Thaddaeus","Simon the Zealot","Judas Iscariot",
+      "Saul","Hezekiah","Josiah","Rehoboam","Jeroboam","Ahab","Jehoshaphat","Jehu",
+      "Eve","Rebekah","Hannah","Rahab","Mary (Mother of Jesus)",
+      "Othniel","Ehud","Shamgar","Jephthah","Eli","Samuel",
+      "Isaiah","Jeremiah","Ezekiel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Elisha",
+      "Abel","Cain","Enoch","Methuselah","Melchizedek","Lot","Hagar","Ishmael","Esau","Rachel","Leah","Judah","Tamar","Potiphar","Pharaoh"],
+    clues:[
+      { clue:"The shepherd boy who defeated a giant with a sling and a stone", answer:"David", ref:"1 Samuel 17" },
+      { clue:"Led the Israelites out of slavery in Egypt", answer:"Moses", ref:"Exodus 12–14" },
+      { clue:"Sold into slavery by his brothers, later became a ruler in Egypt", answer:"Joseph", ref:"Genesis 37" },
+      { clue:"A judge and prophetess who led Israel to victory", answer:"Deborah", ref:"Judges 4" },
+      { clue:"Risked her life to save her people from a plot to destroy them", answer:"Esther", ref:"Esther 4–5" },
+      { clue:"Blinded on the road to Damascus and became a great apostle", answer:"Paul", ref:"Acts 9" },
+      { clue:"The first person to see Jesus after His resurrection", answer:"Mary Magdalene", ref:"John 20:11–18" },
+      { clue:"Known for supernatural strength tied to his uncut hair", answer:"Samson", ref:"Judges 16" }
+    ] },
+  { key:"places", name:"Places & Nations", color:"var(--green)", bg:"rgba(76,154,91,.18)", border:"rgba(76,154,91,.45)",
+    words:["Jericho","Damascus","Bethlehem","Egypt","River Jordan","Mount Sinai","Garden of Gethsemane","Nineveh","Babel","Nazareth","Jerusalem","Galilee","Corinth","Mount Carmel","Sodom","Canaan","Babylon","Ephesus","Bethany","Emmaus",
+      "Antioch","Rome","Philippi","Thessalonica","Athens","Malta","Shechem","Hebron","Dan","Beersheba","Dead Sea","Sea of Galilee"],
+    clues:[
+      { clue:"The city whose walls fell after Israel marched around it seven times", answer:"Jericho", ref:"Joshua 6" },
+      { clue:"The mountain where Moses received the Ten Commandments", answer:"Mount Sinai", ref:"Exodus 19–20" },
+      { clue:"The river where John baptized Jesus", answer:"River Jordan", ref:"Matthew 3:13–17" },
+      { clue:"The garden where Jesus prayed the night before His arrest", answer:"Garden of Gethsemane", ref:"Matthew 26:36–46" },
+      { clue:"The land where the Israelites were enslaved for centuries", answer:"Egypt", ref:"Exodus 1" },
+      { clue:"The city Paul was traveling to when he saw a blinding light", answer:"Damascus", ref:"Acts 9:1–19" },
+      { clue:"The birthplace of both King David and Jesus", answer:"Bethlehem", ref:"Micah 5:2; Luke 2" },
+      { clue:"The wicked capital city where Jonah was sent to preach", answer:"Nineveh", ref:"Jonah 3" }
+    ] },
+  { key:"objects", name:"Objects & Artifacts", color:"var(--yellow)", bg:"rgba(227,178,60,.2)", border:"rgba(227,178,60,.5)",
+    words:["Noah's Ark","Ark of the Covenant","Manna","Sling Stone","Altar","Golden Calf","Frankincense","Oil Lamp","Scarlet Cord","Fiery Chariot","Ten Commandments Tablets","Crown of Thorns","Shepherd's Staff","Coat of Many Colors","Bronze Serpent",
+      "Burning Bush","Manger","Widow's Jar of Oil"],
+    clues:[
+      { clue:"The massive wooden ship built to survive a global flood", answer:"Noah's Ark", ref:"Genesis 6–9" },
+      { clue:"The sacred gold chest holding the stone tablets of the Law", answer:"Ark of the Covenant", ref:"Exodus 25" },
+      { clue:"Supernatural bread from heaven that fed Israel in the wilderness", answer:"Manna", ref:"Exodus 16" },
+      { clue:"The weapon David used to strike down a giant", answer:"Sling Stone", ref:"1 Samuel 17:49" },
+      { clue:"An idol made from melted gold jewelry while Moses was on the mountain", answer:"Golden Calf", ref:"Exodus 32" },
+      { clue:"An expensive perfume brought as a gift by the Wise Men", answer:"Frankincense", ref:"Matthew 2:11" },
+      { clue:"The scarlet rope Rahab hung from her window to save her family", answer:"Scarlet Cord", ref:"Joshua 2:18" },
+      { clue:"The glowing vehicle that carried Elijah up into heaven", answer:"Fiery Chariot", ref:"2 Kings 2:11" }
+    ] },
+  { key:"actions", name:"Actions & Miracles", color:"var(--red)", bg:"rgba(193,80,58,.2)", border:"rgba(193,80,58,.5)",
+    words:["Parting the Red Sea","Baptism","Resurrection","Walking on Water","Feeding the Five Thousand","Crucifixion","Ascension","Turning Water into Wine","Casting out Demons","Healing the Blind Man","Raising Lazarus","Calming the Storm","Anointing","Circumcision",
+      "David and Goliath","Jonah and the Whale","The Creation","Battle of Jericho",
+      "The Good Samaritan","The Prodigal Son","The Sower","The Lost Sheep","The Good Shepherd","The Unforgiving Servant","The Mustard Seed","The Yeast",
+      "Adam and Eve","Abraham's Call","Jacob and Esau","Joseph in Egypt","The Ten Commandments","Ruth's Loyalty",
+      "The Birth of Jesus","The Temptation of Jesus","The Sermon on the Mount","The Woman at the Well","The Last Supper","Pentecost","Paul's Conversion",
+      "Water from the Rock","The Sun Stands Still","Elijah and the Widow","Elisha and the Ax Head",
+      "Healing the Leper","Feeding the Four Thousand","Raising Jairus's Daughter","The Ten Lepers","Healing the Centurion's Servant","The Miraculous Catch of Fish",
+      "Philip and the Ethiopian","Peter's Vision",
+      "Daniel in the Lion's Den","Shadrach, Meshach, and Abednego","Esther's Courage","Moses and the Burning Bush","Gideon's Army",
+      "The Annunciation","The Magi's Visit","Jesus' Baptism","The Transfiguration","The Triumphal Entry","Cleansing the Temple","The Trial of Jesus","The Empty Tomb",
+      "Elisha and the Floating Ax Head","Samson's Final Act","Peter's Healing Shadow","Paul and the Viper","Elijah on Mount Carmel","The Sign for Hezekiah","Balaam's Donkey","Paul's Handkerchiefs","Peter's Angelic Prison Escape"],
+    clues:[
+      { clue:"Jesus commanding the wind and waves to be still", answer:"Calming the Storm", ref:"Mark 4:35–41" },
+      { clue:"God dividing the waters so Israel could escape on dry ground", answer:"Parting the Red Sea", ref:"Exodus 14" },
+      { clue:"Multiplying five loaves and two fish to feed a massive crowd", answer:"Feeding the Five Thousand", ref:"Matthew 14:13–21" },
+      { clue:"Jesus rising from the dead on the third day", answer:"Resurrection", ref:"Luke 24" },
+      { clue:"Jesus and Peter defying gravity on the Sea of Galilee", answer:"Walking on Water", ref:"Matthew 14:22–33" },
+      { clue:"Casting evil spirits out of a possessed man", answer:"Casting out Demons", ref:"Mark 5:1–20" },
+      { clue:"Jesus turning water into wine at a wedding", answer:"Turning Water into Wine", ref:"John 2:1–11" },
+      { clue:"Jesus rising visibly up into the clouds to return to heaven", answer:"Ascension", ref:"Acts 1:9–11" },
+      { clue:"An iron ax head made to float on the surface of a river", answer:"Elisha and the Floating Ax Head", ref:"2 Kings 6:1–7" },
+      { clue:"A blinded strongman pushing down two pillars to destroy a temple", answer:"Samson's Final Act", ref:"Judges 16:23–30" },
+      { clue:"Sick people healed simply by a disciple's shadow falling on them", answer:"Peter's Healing Shadow", ref:"Acts 5:15–16" },
+      { clue:"A prisoner shaking off a venomous snake bite without harm", answer:"Paul and the Viper", ref:"Acts 28:1–6" },
+      { clue:"Fire falling from heaven to consume a water-soaked altar", answer:"Elijah on Mount Carmel", ref:"1 Kings 18:20–39" },
+      { clue:"A shadow moving backward ten steps as a sign to a dying king", answer:"The Sign for Hezekiah", ref:"2 Kings 20:8–11" },
+      { clue:"A donkey speaking aloud to rebuke the prophet riding it", answer:"Balaam's Donkey", ref:"Numbers 22:21–35" },
+      { clue:"Cloths touched by an apostle carried off to heal the sick", answer:"Paul's Handkerchiefs", ref:"Acts 19:11–12" },
+      { clue:"Prison chains falling off as an angel led a sleeping apostle out past the guards", answer:"Peter's Angelic Prison Escape", ref:"Acts 12:6–11" },
+      { clue:"Three men walking unharmed inside a blazing furnace", answer:"Shadrach, Meshach, and Abednego", ref:"Daniel 3" }
+    ] },
+  { key:"books", name:"Books & Letters", color:"var(--orange)", bg:"rgba(217,117,43,.2)", border:"rgba(217,117,43,.5)",
+    words:["Genesis","Revelation","Ephesians","Psalms","Proverbs","Matthew","Romans","Ecclesiastes","Daniel","Hebrews","Exodus","1 Corinthians","2 Corinthians","Job","Jonah","Acts",
+      "Leviticus","Numbers","Deuteronomy","Joshua","Judges","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Lamentations","Song of Solomon",
+      "Mark","Gospel of Luke","Gospel of John","Galatians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Book of James","1 Peter","2 Peter","1 John","2 John","3 John","Jude"],
+    clues:[
+      { clue:"The first book of the Bible, covering Creation and the Patriarchs", answer:"Genesis", ref:"Genesis 1" },
+      { clue:"The final book of the Bible, full of prophetic end-times visions", answer:"Revelation", ref:"Revelation 1" },
+      { clue:"Paul's letter to believers in Rome explaining salvation by faith", answer:"Romans", ref:"Romans 1" },
+      { clue:"A book of songs, poems, and prayers written largely by King David", answer:"Psalms", ref:"Psalm 1" },
+      { clue:"A collection of wise sayings mostly written by King Solomon", answer:"Proverbs", ref:"Proverbs 1" },
+      { clue:"The Gospel written by a former tax collector", answer:"Matthew", ref:"Matthew 1" },
+      { clue:"A philosophical book asking about the meaning of life \"under the sun\"", answer:"Ecclesiastes", ref:"Ecclesiastes 1" },
+      { clue:"The book with stories of a lions' den and apocalyptic dreams", answer:"Daniel", ref:"Daniel 1" }
+    ] },
+  { key:"random", name:"Random & Scripture", color:"var(--purple)", bg:"rgba(139,110,184,.2)", border:"rgba(139,110,184,.5)",
+    words:["Grace","Faith","Covenant","Frankincense","Wisdom","Sabbath","Prophecy","Repentance","Salvation","Sacrifice","Kingdom of Heaven","Holy Spirit","Parable","Fruit of the Spirit","Beatitudes",
+      "Proverbs 3:5-6","Psalm 23","Ecclesiastes 3","Job's Suffering",
+      "Marriage","Friendship","Forgiveness","The Church","Honoring Parents","Loving Your Enemy",
+      "The Lord's Prayer","Prayer of Faith","Worship in Spirit and Truth","Pray Without Ceasing","The Prayer of Jabez",
+      "Justification","Sanctification","Redemption","Assurance",
+      "John 3:16","Psalm 119:105","Philippians 4:13","Jeremiah 29:11","Romans 8:28","Matthew 28:19-20","Joshua 1:9","2 Timothy 3:16","1 John 4:8","Proverbs 1:7",
+      "Poor in Spirit","Those Who Mourn","The Meek","Hunger and Thirst for Righteousness","The Merciful","Pure in Heart","The Peacemakers","Persecuted for Righteousness",
+      "Propitiation","Speaking in Tongues","The Judgment Seat of Christ","The Armor of God","New Creation","Blasphemy Against the Holy Spirit","Spiritual Gifts","Sealed by the Holy Spirit"],
+    clues:[
+      { clue:"Unmerited favor freely given, not earned", answer:"Grace", ref:"Ephesians 2:8" },
+      { clue:"Complete trust and confidence in what you cannot yet see", answer:"Faith", ref:"Hebrews 11:1" },
+      { clue:"A solemn agreement or promise between God and His people", answer:"Covenant", ref:"Genesis 9:8–17" },
+      { clue:"Turning away from sin and returning to God", answer:"Repentance", ref:"Acts 3:19" },
+      { clue:"The day of rest observed as holy", answer:"Sabbath", ref:"Exodus 20:8–11" },
+      { clue:"The nine qualities including love, joy, peace, and patience", answer:"Fruit of the Spirit", ref:"Galatians 5:22–23" },
+      { clue:"A short story Jesus told to teach a spiritual lesson", answer:"Parable", ref:"Matthew 13:3" },
+      { clue:"The blessings Jesus described at the start of the Sermon on the Mount", answer:"Beatitudes", ref:"Matthew 5:3–12" },
+      { clue:"Being declared righteous before God through faith alone", answer:"Justification", ref:"Romans 5:1" },
+      { clue:"The lifelong process of being made more holy and Christlike", answer:"Sanctification", ref:"1 Thessalonians 4:3" },
+      { clue:"Christ's sacrifice satisfying God's wrath on our behalf", answer:"Propitiation", ref:"Romans 3:25" },
+      { clue:"Believers speaking in unknown languages by the Spirit's power", answer:"Speaking in Tongues", ref:"Acts 2:4" },
+      { clue:"The place where every believer's works will be evaluated by Christ", answer:"The Judgment Seat of Christ", ref:"2 Corinthians 5:10" },
+      { clue:"The spiritual equipment believers are told to put on for battle", answer:"The Armor of God", ref:"Ephesians 6:10–18" },
+      { clue:"The renewed heavens and earth promised at the end of time", answer:"New Creation", ref:"Revelation 21:1" },
+      { clue:"The one sin Jesus called unforgivable", answer:"Blasphemy Against the Holy Spirit", ref:"Matthew 12:31–32" },
+      { clue:"Paul's list of gifts including prophecy, healing, and teaching", answer:"Spiritual Gifts", ref:"1 Corinthians 12:4–11" },
+      { clue:"The seal placed on every believer marking them as God's own", answer:"Sealed by the Holy Spirit", ref:"Ephesians 1:13" }
+    ] },
+];
+
+/* ---------------- STATE ---------------- */
+let state = {
+  teams: [],
+  target: 30,
+  mapStyle: "classic",
+  scores: [],
+  activeTeam: 0,
+  turnNum: 1,
+  turnPoints: 0,
+  timer: 30,
+  timerId: null,
+  currentCatIdx: -1,
+  bag: [],
+  turnLog: [],
+  currentItem: null,
+  motionEnabled: true,
+  triviaEnabled: true,
+};
+
+/* ---------------- AUDIO (Web Audio API, no external files) ---------------- */
+let audioCtx = null;
+function initAudio(){
+  if(audioCtx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(AC) audioCtx = new AC();
+}
+function playTick(urgent){
+  if(!audioCtx) return;
+  if(audioCtx.state === "suspended") audioCtx.resume();
+  const t0 = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "square";
+  osc.frequency.setValueAtTime(urgent ? 1400 : 1000, t0);
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(urgent ? 0.16 : 0.1, t0+0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.06);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(t0);
+  osc.stop(t0+0.07);
+}
+function playBuzzer(){
+  if(!audioCtx) return;
+  if(audioCtx.state === "suspended") audioCtx.resume();
+  const t0 = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sawtooth";
+  osc.frequency.setValueAtTime(180, t0);
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(0.22, t0+0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.55);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(t0);
+  osc.stop(t0+0.6);
+}
+function playChime(){
+  if(!audioCtx) return;
+  if(audioCtx.state === "suspended") audioCtx.resume();
+  const t0 = audioCtx.currentTime;
+  [880,1108].forEach((f,i)=>{
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(f, t0+i*0.03);
+    gain.gain.setValueAtTime(0.0001, t0+i*0.03);
+    gain.gain.exponentialRampToValueAtTime(0.12, t0+i*0.03+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+i*0.03+0.18);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(t0+i*0.03);
+    osc.stop(t0+i*0.03+0.2);
+  });
+}
+
+const $ = (id) => document.getElementById(id);
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+
+/* ---------------- BONUS CLUE CARDS (statement clues, described just like a word) ---------------- */
+$("triviaToggle").addEventListener("change", function(){
+  state.triviaEnabled = this.checked;
+});
+
+/* ---------------- MOTION CONTROLS (tilt up = correct, tilt down = skip) ---------------- */
+const TILT_THRESHOLD = 28; // degrees of change from baseline needed to trigger
+const TILT_COOLDOWN_MS = 700;
+let motionBaselineBeta = null;
+let motionCooldown = false;
+let motionListenerActive = false;
+let motionSupported = "DeviceOrientationEvent" in window;
+
+$("motionToggle").addEventListener("change", function(){
+  state.motionEnabled = this.checked;
+});
+
+function setMotionHint(mode){
+  const hint = $("motionHint");
+  if(mode === "active"){
+    hint.classList.remove("inactive");
+    hint.innerHTML = '<span class="arrow up">▲</span> Tilt up = Got it &nbsp;·&nbsp; Tilt down = Skip <span class="arrow down">▼</span>';
+  } else if(mode === "denied"){
+    hint.classList.add("inactive");
+    hint.textContent = "Motion permission denied — use the buttons below";
+  } else if(mode === "unsupported"){
+    hint.classList.add("inactive");
+    hint.textContent = "Tilt controls unavailable on this device — use the buttons below";
+  } else {
+    hint.classList.add("inactive");
+    hint.textContent = "Tilt controls off — use the buttons below";
+  }
+}
+
+function requestMotionPermission(){
+  if(!motionSupported) return Promise.resolve(false);
+  if(typeof DeviceOrientationEvent.requestPermission === "function"){
+    return DeviceOrientationEvent.requestPermission()
+      .then(result => result === "granted")
+      .catch(() => false);
+  }
+  return Promise.resolve(true);
+}
+
+function handleTilt(e){
+  if(e.beta === null || e.beta === undefined) return;
+  if(motionBaselineBeta === null){
+    motionBaselineBeta = e.beta;
+    return;
+  }
+  if(motionCooldown) return;
+  const diff = e.beta - motionBaselineBeta;
+  if(diff > TILT_THRESHOLD){
+    triggerMotionAction("correct");
+  } else if(diff < -TILT_THRESHOLD){
+    triggerMotionAction("skip");
+  }
+}
+
+function triggerMotionAction(action){
+  motionCooldown = true;
+  if(action === "correct") $("correctBtn").click();
+  else $("skipBtn").click();
+  setTimeout(()=>{
+    motionBaselineBeta = null; // recalibrate to whatever position the phone settles in next
+    motionCooldown = false;
+  }, TILT_COOLDOWN_MS);
+}
+
+function startMotionListening(){
+  motionBaselineBeta = null;
+  motionCooldown = false;
+  window.addEventListener("deviceorientation", handleTilt);
+  motionListenerActive = true;
+  setMotionHint("active");
+}
+function stopMotionListening(){
+  if(motionListenerActive){
+    window.removeEventListener("deviceorientation", handleTilt);
+    motionListenerActive = false;
+  }
+  motionBaselineBeta = null;
+}
+
+/* ---------------- SETUP ---------------- */
+function renderTeamsList(){
+  const wrap = $("teamsList");
+  wrap.innerHTML = "";
+  teamNames.forEach((name, i)=>{
+    const row = document.createElement("div");
+    row.className = "team-row-item";
+
+    const input = document.createElement("input");
+    input.className = "team-input";
+    input.maxLength = 16;
+    input.placeholder = `Team ${i+1} name`;
+    input.value = name;
+    input.style.setProperty("--team-color", TEAM_COLORS[i]);
+    input.addEventListener("input", ()=>{ teamNames[i] = input.value; });
+    row.appendChild(input);
+
+    if(teamNames.length > 2){
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "team-remove-btn";
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", ()=>{
+        teamNames.splice(i,1);
+        renderTeamsList();
+      });
+      row.appendChild(removeBtn);
+    }
+
+    wrap.appendChild(row);
+  });
+
+  $("addTeamBtn").style.display = teamNames.length >= 4 ? "none" : "block";
+}
+renderTeamsList();
+
+$("addTeamBtn").addEventListener("click", ()=>{
+  if(teamNames.length >= 4) return;
+  teamNames.push(`Team ${teamNames.length+1}`);
+  renderTeamsList();
+});
+
+$("mapRow").addEventListener("click",(e)=>{
+  const pill = e.target.closest(".map-pill");
+  if(!pill) return;
+  document.querySelectorAll(".map-pill").forEach(p=>p.classList.remove("selected"));
+  pill.classList.add("selected");
+  state.mapStyle = pill.dataset.style;
+});
+
+$("targetRow").addEventListener("click",(e)=>{
+  const pill = e.target.closest(".target-pill");
+  if(!pill) return;
+  document.querySelectorAll(".target-pill").forEach(p=>p.classList.remove("selected"));
+  pill.classList.add("selected");
+  if(pill.dataset.val === "custom"){
+    const input = pill.querySelector("input");
+    state.target = parseInt(input.value,10) || 30;
+    input.focus();
+  } else {
+    state.target = parseInt(pill.dataset.val,10);
+  }
+});
+
+$("customTarget").addEventListener("input", function(){
+  const val = parseInt(this.value,10);
+  if(val > 0) state.target = val;
+});
+
+$("startGameBtn").addEventListener("click",()=>{
+  state.teams = teamNames.map((n,i)=> n.trim() || `Team ${i+1}`);
+  state.scores = state.teams.map(()=>0);
+  state.activeTeam = 0;
+  state.turnNum = 1;
+  rebuildBoardLanes();
+  goToHandoff();
+});
+
+function goToHandoff(){
+  $("handoffTurnNum").textContent = state.turnNum;
+  const chip = $("handoffChip");
+  chip.textContent = state.teams[state.activeTeam];
+  chip.style.background = TEAM_COLORS[state.activeTeam];
+  chip.style.color = "#102022";
+  showScreen("screen-handoff");
+}
+
+$("readyBtn").addEventListener("click", ()=>{
+  initAudio();
+  if(state.motionEnabled){
+    requestMotionPermission().then(granted=>{
+      if(granted) startMotionListening();
+      else setMotionHint(motionSupported ? "denied" : "unsupported");
+    });
+  } else {
+    setMotionHint("off");
+  }
+  startTurn();
+});
+
+/* ---------------- WELL BOARD (SIGNATURE VISUAL — supports 2-4 teams, 3 map styles) ---------------- */
+// All coordinates are in percent space (0-100); SVG viewBox is 400x400 so we multiply by 4 when drawing.
+const BOARD_CENTER_PCT = 50;
+const BOARD_OUTER_R_PCT = 41;
+
+function laneStartPoint(i, count){
+  const angle = (-90 + i * (360 / count)) * (Math.PI / 180);
+  return { x: BOARD_CENTER_PCT + BOARD_OUTER_R_PCT * Math.cos(angle), y: BOARD_CENTER_PCT + BOARD_OUTER_R_PCT * Math.sin(angle), angle };
+}
+
+function laneWaypoints(style, i, count){
+  const start = laneStartPoint(i, count);
+  const center = { x: BOARD_CENTER_PCT, y: BOARD_CENTER_PCT };
+
+  if(style === "winding"){
+    const steps = 14;
+    const perpAngle = start.angle + Math.PI/2;
+    const pts = [];
+    for(let s=0;s<=steps;s++){
+      const t = s/steps;
+      const baseX = start.x + (center.x-start.x)*t;
+      const baseY = start.y + (center.y-start.y)*t;
+      const wiggle = Math.sin(t*Math.PI*3) * 9 * (1-t);
+      pts.push({ x: baseX + Math.cos(perpAngle)*wiggle, y: baseY + Math.sin(perpAngle)*wiggle });
+    }
+    return pts;
+  }
+
+  if(style === "hex"){
+    const steps = 22;
+    const turns = 1.5;
+    const pts = [];
+    for(let s=0;s<=steps;s++){
+      const t = s/steps;
+      const angle = start.angle + t*turns*2*Math.PI;
+      const r = BOARD_OUTER_R_PCT * (1-t);
+      pts.push({ x: BOARD_CENTER_PCT + r*Math.cos(angle), y: BOARD_CENTER_PCT + r*Math.sin(angle) });
+    }
+    return pts;
+  }
+
+  // "classic" — right-angle maze-corridor zigzag from edge to center
+  const steps = 6;
+  const pts = [start];
+  let cur = { x: start.x, y: start.y };
+  for(let s=1;s<=steps;s++){
+    const t = s/steps;
+    const targetX = start.x + (center.x-start.x)*t;
+    const targetY = start.y + (center.y-start.y)*t;
+    cur = (s % 2 === 1) ? { x: targetX, y: cur.y } : { x: cur.x, y: targetY };
+    pts.push({ x: cur.x, y: cur.y });
+  }
+  pts.push(center);
+  return pts;
+}
+
+function pointAtProgress(waypoints, progress){
+  const clamped = Math.max(0, Math.min(progress, 1));
+  const totalSegments = waypoints.length - 1;
+  const segFloat = clamped * totalSegments;
+  const idx = Math.min(Math.floor(segFloat), totalSegments - 1);
+  const segT = segFloat - idx;
+  const p1 = waypoints[idx], p2 = waypoints[Math.min(idx+1, totalSegments)];
+  return { x: p1.x + (p2.x-p1.x)*segT, y: p1.y + (p2.y-p1.y)*segT, idx, segT };
+}
+
+function pointsToAttr(points){
+  return points.map(p => `${(p.x*4).toFixed(1)},${(p.y*4).toFixed(1)}`).join(" ");
+}
+
+let currentLaneWaypoints = [];
+
+function rebuildBoardLanes(){
+  const count = state.teams.length || 2;
+  const style = state.mapStyle || "classic";
+  const lanesG = $("spokeLanes");
+  const progressG = $("spokeProgress");
+  const dotsWrap = $("teamIndicators");
+  const legendWrap = $("boardLegend");
+  lanesG.innerHTML = "";
+  progressG.innerHTML = "";
+  dotsWrap.innerHTML = "";
+  legendWrap.innerHTML = "";
+  currentLaneWaypoints = [];
+
+  for(let i=0;i<count;i++){
+    const waypoints = laneWaypoints(style, i, count);
+    currentLaneWaypoints.push(waypoints);
+    const color = TEAM_COLORS[i];
+
+    const laneLine = document.createElementNS("http://www.w3.org/2000/svg","polyline");
+    laneLine.setAttribute("points", pointsToAttr(waypoints));
+    laneLine.setAttribute("fill", "none");
+    laneLine.setAttribute("stroke", color);
+    laneLine.setAttribute("stroke-width", "3");
+    laneLine.setAttribute("stroke-linecap", "round");
+    laneLine.setAttribute("stroke-linejoin", "round");
+    laneLine.setAttribute("opacity", "0.2");
+    lanesG.appendChild(laneLine);
+
+    const progLine = document.createElementNS("http://www.w3.org/2000/svg","polyline");
+    progLine.setAttribute("id", `laneProgress${i}`);
+    progLine.setAttribute("points", pointsToAttr([waypoints[0]]));
+    progLine.setAttribute("fill", "none");
+    progLine.setAttribute("stroke", color);
+    progLine.setAttribute("stroke-width", "5");
+    progLine.setAttribute("stroke-linecap", "round");
+    progLine.setAttribute("stroke-linejoin", "round");
+    progLine.setAttribute("opacity", "0.8");
+    progLine.setAttribute("filter", "url(#glow)");
+    progressG.appendChild(progLine);
+
+    const start = waypoints[0];
+    const dot = document.createElement("div");
+    dot.className = "team-dot";
+    dot.id = `teamDot${i}`;
+    dot.style.setProperty("--dot-color", color);
+    dot.style.setProperty("--dot-glow", color+"80");
+    dot.style.left = start.x + "%";
+    dot.style.top = start.y + "%";
+    dot.innerHTML = `<span class="label">${i+1}</span><span class="pulse"></span>`;
+    dotsWrap.appendChild(dot);
+
+    const legendItem = document.createElement("span");
+    legendItem.className = "legend-item";
+    legendItem.innerHTML = `<span class="legend-swatch" style="background:${color};"></span><span id="legendName${i}"></span>`;
+    legendWrap.appendChild(legendItem);
+  }
+}
+
+function updateBoard(){
+  const target = state.target;
+
+  state.teams.forEach((name,i)=>{
+    const score = Math.min(state.scores[i] || 0, target);
+    const progress = target > 0 ? score / target : 0;
+    const waypoints = currentLaneWaypoints[i];
+    if(!waypoints) return;
+    const pt = pointAtProgress(waypoints, progress);
+    const traveled = waypoints.slice(0, pt.idx+1).concat([pt]);
+
+    const progLine = $(`laneProgress${i}`);
+    if(progLine) progLine.setAttribute("points", pointsToAttr(traveled));
+
+    const dot = $(`teamDot${i}`);
+    if(dot){ dot.style.left = pt.x + "%"; dot.style.top = pt.y + "%"; }
+
+    const legendName = $(`legendName${i}`);
+    if(legendName) legendName.textContent = name;
+  });
+
+  $("boardTarget").textContent = target;
+}
+
+/* ---------------- TURN / PLAY LOOP ---------------- */
+function shuffleArray(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function shuffledBag(){
+  let pool = [];
+  CATEGORIES.forEach(cat=>{
+    cat.words.forEach(w=>pool.push({type:"describe", cat, word:w, answer:w}));
+  });
+  shuffleArray(pool);
+
+  if(state.triviaEnabled){
+    let cluePool = [];
+    CATEGORIES.forEach(cat=>{
+      (cat.clues||[]).forEach(c=>cluePool.push({type:"clue", cat, word:c.clue, answer:c.answer, ref:c.ref}));
+    });
+    shuffleArray(cluePool);
+    const clueCount = Math.min(cluePool.length, Math.max(4, Math.floor(pool.length * 0.15)));
+    pool.push(...cluePool.slice(0, clueCount));
+    shuffleArray(pool);
+  }
+  return pool;
+}
+
+function startTurn(){
+  state.turnPoints = 0;
+  state.timer = 30;
+  state.bag = shuffledBag();
+  state.turnLog = [];
+  state.currentItem = null;
+  $("playTeamLabel").textContent = state.teams[state.activeTeam].toUpperCase();
+  $("playTeamScore").textContent = state.scores[state.activeTeam];
+  $("turnTally").textContent = 0;
+  nextCard();
+  showScreen("screen-play");
+  runTimer();
+}
+
+function nextCard(){
+  if(state.bag.length===0) state.bag = shuffledBag();
+  const item = state.bag.pop();
+  state.currentItem = item;
+  const cat = item.cat;
+  const badge = $("categoryBadge");
+  badge.textContent = cat.name;
+  badge.style.background = cat.bg;
+  badge.style.border = "1px solid "+cat.border;
+  badge.style.color = cat.color;
+
+  const wordEl = $("wordDisplay");
+  wordEl.textContent = item.word;
+  wordEl.classList.toggle("clue-text", item.type === "clue");
+}
+
+const CIRC = 2*Math.PI*33;
+function runTimer(){
+  const fill = $("timerFill");
+  fill.setAttribute("stroke-dasharray", CIRC);
+  updateTimerVisual();
+  state.timerId = setInterval(()=>{
+    state.timer -= 1;
+    updateTimerVisual();
+    if(state.timer<=0){
+      clearInterval(state.timerId);
+      playBuzzer();
+      endTurn();
+    } else {
+      playTick(state.timer<=10);
+    }
+  },1000);
+}
+function updateTimerVisual(){
+  $("timerNum").textContent = state.timer;
+  const fill = $("timerFill");
+  const pct = state.timer/30;
+  fill.setAttribute("stroke-dashoffset", CIRC*(1-pct));
+  fill.style.stroke = state.timer<=10 ? "var(--red)" : "var(--water-glow)";
+}
+
+function awardPoint(){
+  playChime();
+  if(state.currentItem) state.turnLog.push({ text: state.currentItem.word, answer: state.currentItem.answer, ref: state.currentItem.ref, type: state.currentItem.type, correct: true });
+  state.turnPoints += 1;
+  state.scores[state.activeTeam] += 1;
+  $("playTeamScore").textContent = state.scores[state.activeTeam];
+  $("turnTally").textContent = state.turnPoints;
+  if(state.scores[state.activeTeam] >= state.target){
+    clearInterval(state.timerId);
+    finishGame();
+    return;
+  }
+  nextCard();
+}
+
+function skipCard(){
+  if(state.currentItem) state.turnLog.push({ text: state.currentItem.word, answer: state.currentItem.answer, ref: state.currentItem.ref, type: state.currentItem.type, correct: false });
+  nextCard();
+}
+
+$("correctBtn").addEventListener("click", awardPoint);
+$("skipBtn").addEventListener("click", skipCard);
+
+function endTurn(){
+  stopMotionListening();
+  $("summaryPoints").textContent = state.turnPoints;
+  renderTurnLog();
+  const board = $("summaryBoard");
+  board.innerHTML = state.teams.map((name,i)=>
+    `<div class="board-row"><span class="name">${escapeHtml(name)}</span><span class="pts">${state.scores[i]} / ${state.target}</span></div>`
+  ).join("");
+  updateBoard();
+  showScreen("screen-summary");
+}
+
+function renderTurnLog(){
+  const wrap = $("turnLog");
+  if(state.turnLog.length === 0){
+    wrap.innerHTML = '<p class="turn-log-empty">No cards answered this turn.</p>';
+    return;
+  }
+  wrap.innerHTML = state.turnLog.map(entry => `
+    <div class="turn-log-row ${entry.correct ? "correct" : "skipped"}">
+      <span class="turn-log-text">
+        ${escapeHtml(entry.text)}
+        ${entry.type === "clue" ? `<span class="turn-log-answer">Answer: ${escapeHtml(entry.answer)}${entry.ref ? ` <span class="turn-log-ref">(${escapeHtml(entry.ref)})</span>` : ""}</span>` : ""}
+      </span>
+      <span class="turn-log-icon">${entry.correct ? "✓" : "✗"}</span>
+    </div>
+  `).join("");
+}
+
+$("nextTurnBtn").addEventListener("click",()=>{
+  state.activeTeam = (state.activeTeam + 1) % state.teams.length;
+  if(state.activeTeam === 0) state.turnNum += 1;
+  goToHandoff();
+});
+
+function finishGame(){
+  stopMotionListening();
+  const winnerIdx = state.activeTeam;
+  $("winTeamName").textContent = state.teams[winnerIdx];
+  $("winScoreLine").textContent = state.scores[winnerIdx] + " points at the Well of Life";
+  showScreen("screen-win");
+}
+
+function resetToSetup(){
+  clearInterval(state.timerId);
+  stopMotionListening();
+  state.scores = state.teams.map(()=>0);
+  state.turnNum=1;
+  state.activeTeam=0;
+  showScreen("screen-setup");
+}
+
+$("restartBtn").addEventListener("click", ()=>{
+  if(confirm("Restart the game and return to the welcome screen? Both scores will reset to zero.")) resetToSetup();
+});
+
+$("endGameBtn").addEventListener("click", ()=>{
+  if(confirm("End the game now and return to the welcome screen?")) resetToSetup();
+});
+
+$("playAgainBtn").addEventListener("click", resetToSetup);
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+</script>
+</body>
+</html>
