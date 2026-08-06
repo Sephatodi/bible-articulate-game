@@ -361,7 +361,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;}
     <div class="toggle-row">
       <div class="toggle-copy">
         <span class="toggle-title">Tilt controls</span>
-        <span class="toggle-sub">Tilt phone up for correct, down for wrong</span>
+        <span class="toggle-sub">Tilt phone down for correct, up to pass</span>
       </div>
       <label class="switch">
         <input type="checkbox" id="motionToggle" checked>
@@ -436,7 +436,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer;border:none;}
     </div>
     <p class="turn-total">Guessed this turn: <strong id="turnTally">0</strong></p>
     <div class="motion-hint inactive" id="motionHint">
-      <span class="arrow up">▲</span> Tilt up = Got it &nbsp;·&nbsp; Tilt down = Wrong <span class="arrow down">▼</span>
+      <span class="arrow down">▼</span> Tilt down = Got it &nbsp;·&nbsp; Tilt up = Wrong <span class="arrow up">▲</span>
     </div>
   </section>
 
@@ -724,7 +724,7 @@ $("triviaToggle").addEventListener("change", function(){
   state.triviaEnabled = this.checked;
 });
 
-/* ---------------- MOTION CONTROLS (tilt up = correct, tilt down = wrong) ---------------- */
+/* ---------------- MOTION CONTROLS (tilt down = correct, tilt up = wrong/pass) ---------------- */
 const TILT_THRESHOLD = 28; // degrees of change from baseline needed to trigger
 const TILT_COOLDOWN_MS = 700;
 let motionBaselineBeta = null;
@@ -740,7 +740,7 @@ function setMotionHint(mode){
   const hint = $("motionHint");
   if(mode === "active"){
     hint.classList.remove("inactive");
-    hint.innerHTML = '<span class="arrow up">▲</span> Tilt up = Got it &nbsp;·&nbsp; Tilt down = Wrong <span class="arrow down">▼</span>';
+    hint.innerHTML = '<span class="arrow down">▼</span> Tilt down = Got it &nbsp;·&nbsp; Tilt up = Wrong <span class="arrow up">▲</span>';
   } else if(mode === "denied"){
     hint.classList.add("inactive");
     hint.textContent = "Motion permission denied — use the buttons below";
@@ -772,9 +772,9 @@ function handleTilt(e){
   if(motionCooldown) return;
   const diff = e.beta - motionBaselineBeta;
   if(diff > TILT_THRESHOLD){
-    triggerMotionAction("correct");
-  } else if(diff < -TILT_THRESHOLD){
     triggerMotionAction("skip");
+  } else if(diff < -TILT_THRESHOLD){
+    triggerMotionAction("correct");
   }
 }
 
